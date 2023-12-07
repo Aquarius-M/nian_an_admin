@@ -69,13 +69,18 @@ async def verify_token(request: Request):
     role_ids = mapping.get('role_ids')
     menus = []
     # 校验角色权限是否存在
+    # for role_id in role_ids:
+    #     if not await RedisUtil.hexists(AdminConfig.backstage_roles_key, role_id):
+    #         await SystemAuthPermService.cache_role_menus_by_role_id(role_id)
+    #     menus.extend(await RedisUtil.hget(AdminConfig.backstage_roles_key, role_id))
     for role_id in role_ids:
         if not await RedisUtil.hexists(AdminConfig.backstage_roles_key, role_id):
             await SystemAuthPermService.cache_role_menus_by_role_id(role_id)
-        menus.extend(await RedisUtil.hget(AdminConfig.backstage_roles_key, role_id))
+        x = await RedisUtil.hget(AdminConfig.backstage_roles_key, role_id)
+        menus.extend(i for i in x.split(','))
 
     # 验证是否有权限操作
-    if not (menus and auths in menus.split(',')):
+    if not (menus and auths in menus):
         raise AppException(HttpResp.NO_PERMISSION)
 
 

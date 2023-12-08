@@ -10,27 +10,16 @@
                     <el-avatar :src="formData.avatar" :size="58" />
                 </div>
                 <el-form-item label="用户编号："> {{ formData.sn }} </el-form-item>
-                <el-form-item label="用户昵称：">
-                    {{ formData.nickname }}
-                </el-form-item>
                 <el-form-item label="账号：">
                     {{ formData.username }}
-                    <popover-input
-                        class="ml-[10px]"
-                        :limit="32"
-                        @confirm="handleEdit($event, 'username')"
-                    >
-                        <el-button type="primary" link v-perms="['user:edit']">
-                            <icon name="el-icon-EditPen" />
-                        </el-button>
-                    </popover-input>
                 </el-form-item>
-                <el-form-item label="真实姓名：">
-                    {{ formData.realName || '-' }}
+                <el-form-item label="用户昵称：">
+                    {{ formData.nickname }}
                     <popover-input
                         class="ml-[10px]"
                         :limit="32"
-                        @confirm="handleEdit($event, 'realName')"
+                        :value="formData.nickname"
+                        @confirm="handleEdit($event, 'nickname')"
                     >
                         <el-button type="primary" link v-perms="['user:edit']">
                             <icon name="el-icon-EditPen" />
@@ -42,6 +31,7 @@
                     <popover-input
                         class="ml-[10px]"
                         type="select"
+                        :value="formData.sex"
                         :options="[
                             {
                                 label: '未知',
@@ -63,11 +53,26 @@
                         </el-button>
                     </popover-input>
                 </el-form-item>
+                <el-form-item label="真实姓名：">
+                    {{ formData.realName || '-' }}
+                    <popover-input
+                        class="ml-[10px]"
+                        :value="formData.realName"
+                        :limit="32"
+                        @confirm="handleEdit($event, 'realName')"
+                    >
+                        <el-button type="primary" link v-perms="['user:edit']">
+                            <icon name="el-icon-EditPen" />
+                        </el-button>
+                    </popover-input>
+                </el-form-item>
+                
                 <el-form-item label="联系电话：">
                     {{ formData.mobile || '-' }}
                     <popover-input
                         class="ml-[10px]"
                         type="number"
+                        :value="formData.mobile"
                         @confirm="handleEdit($event, 'mobile')"
                     >
                         <el-button type="primary" link v-perms="['user:edit']">
@@ -91,17 +96,17 @@ import { isEmpty } from '@/utils/util'
 
 const route = useRoute()
 const formData = reactive({
+    sn: '',
     avatar: '',
+    nickname: '',
+    username: '',
+    realName: '',
+    sex: '',
+    mobile: '',
     channel: '',
     createTime: '',
     lastLoginIp: '',
     lastLoginTime: '',
-    mobile: '',
-    nickname: '',
-    realName: 0,
-    sex: 0,
-    sn: '',
-    username: ''
 })
 
 const formRef = shallowRef<FormInstance>()

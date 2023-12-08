@@ -70,7 +70,13 @@ class UserService(IUserService):
             select([user_table.c.id]).select_from(user_table).where(
                 user_table.c.id == edit_in.id, user_table.c.is_delete == 0).limit(1)), '数据不存在！'
 
-        if edit_in.field == 'username':
+        if edit_in.field == 'nickname':
+            assert len(edit_in.value) <= 32, '昵称不能超过32个字符'
+            assert not await db.fetch_one(
+                select([user_table.c.id]).select_from(user_table).where(
+                    user_table.c.nickname == edit_in.value, user_table.c.is_delete == 0).limit(1)), '当前昵称已存在！'
+
+        elif edit_in.field == 'username':
             assert len(edit_in.value) <= 32, '账号不能超过32个字符'
             assert not await db.fetch_one(
                 select([user_table.c.id]).select_from(user_table).where(

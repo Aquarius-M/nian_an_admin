@@ -4,11 +4,15 @@
             <el-page-header content="用户详情" @back="$router.back()" />
         </el-card>
         <el-card class="mt-4 !border-none" header="基本资料" shadow="never">
-            <el-form ref="formRef" class="ls-form" :model="formData" label-width="120px">
-                <div class="bg-page py-5 pl-20 mb-10">
-                    <div class="mb-3 text-tx-regular">用户头像</div>
-                    <el-avatar :src="formData.avatar" :size="58" />
-                </div>
+            <el-form ref="formRef" class="ls-form" :model="formData"  label-width="120px">
+                <el-form-item label="头像：">
+                    <div>
+                        <div>
+                            <material-picker v-model="formData.avatar" :limit="1" />
+                        </div>
+                        <div class="form-tips">建议尺寸：100*100px，支持jpg，jpeg，png格式</div>
+                    </div>
+                </el-form-item>
                 <el-form-item label="用户编号："> {{ formData.sn }} </el-form-item>
                 <el-form-item label="账号：">
                     {{ formData.username }}

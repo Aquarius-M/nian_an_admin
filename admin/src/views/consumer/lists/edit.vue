@@ -27,6 +27,34 @@
                 <el-form-item label="确认密码" prop="passwordConfirm">
                     <el-input v-model.trim="formData.passwordConfirm" show-password clearable placeholder="请输入确认密码" />
                 </el-form-item>
+
+                <el-form-item label="性别" prop="sex">
+                    <el-select v-model="formData.sex" class="flex-1" clearable :value="formData.sex"
+                        placeholder="请选择性别">
+                        <el-option v-for="(item, index) in [
+                            {
+                                label: '未知',
+                                index: 0
+                            },
+                            {
+                                label: '男',
+                                index: 1
+                            },
+                            {
+                                label: '女',
+                                index: 2
+                            }
+                        ]" :key="index" :label="item.label" :value="item.index" />
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="手机号码：" prop="mobile">
+                    <el-input v-model="formData.mobile" placeholder="请输入手机号" clearable />
+                </el-form-item>
+
+                <el-form-item label="真实姓名：" prop="realName">
+                    <el-input v-model="formData.realName" placeholder="请输入真实姓名" clearable />
+                </el-form-item>
             </el-form>
         </popup>
     </div>
@@ -50,7 +78,10 @@ const formData = reactive({
     avatar: '',
     password: '',
     passwordConfirm: '',
+    mobile: '',
+    realName: '',
     channel: 7,
+    sex: 0
 })
 
 

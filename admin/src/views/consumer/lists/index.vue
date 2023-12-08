@@ -54,6 +54,16 @@
                     <el-table-column label="性别" prop="sex" min-width="100" />
                     <el-table-column label="注册来源" prop="channel" min-width="100" />
                     <el-table-column label="注册时间" prop="createTime" min-width="120" />
+                    <el-table-column label="状态" min-width="100">
+                        <template #default="{ row }">
+                            <el-switch
+                                :model-value="row.isDisable"
+                                :active-value="1"
+                                :inactive-value="0"
+                                @change="($event) =>changeStatus($event, row.id)"
+                            />
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" width="120" fixed="right">
                         <template #default="{ row }">
                             <el-button v-perms="['user:detail']" type="primary" link>
@@ -85,6 +95,9 @@ import { getRoutePath } from '@/router'
 import { getUserList } from '@/api/consumer'
 import { ClientMap } from '@/enums/appEnums'
 import EditPopup from './edit.vue'
+import feedback from '@/utils/feedback'
+import { onActivated, onMounted } from 'vue'
+
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()
 
 const queryParams = reactive({
@@ -106,9 +119,24 @@ const handleAdd = async () => {
     editRef.value?.open('add')
 }
 
+const changeStatus = async (active: any, id: number) => {
+    try {
+        await feedback.confirm(`确定${active ? '停用' : '开启'}当前用户？`)
+        // await adminStatus({ id })
+        feedback.msgSuccess('修改成功')
+        getLists()
+    } catch (error) {
+        getLists()
+    }
+}
+
 onActivated(() => {
     getLists()
 })
 
-getLists()
+onMounted(() =>{
+    getLists()
+})
+
+// getLists()
 </script>

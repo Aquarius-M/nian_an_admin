@@ -20,3 +20,8 @@ export function getUserDetail(params: any) {
 export function userEdit(params: any) {
     return request.post({ url: '/user/edit', params })
 }
+
+// 用户禁用
+export function userStatus(params: any) {
+    return request.post({ url: '/user/disable', params })
+}

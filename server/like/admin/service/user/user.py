@@ -7,13 +7,14 @@ from fastapi_pagination.bases import AbstractPage
 from fastapi_pagination.ext.databases import paginate
 from sqlalchemy import select, or_
 
-from like.admin.schemas.user import UserListIn, UserInfoOut, UserEditlIn, UserDetailIn
+from like.admin.schemas.user import UserListIn, UserInfoOut, UserEditlIn, UserDetailIn,UserCreateIn
 from like.common.enums import get_login_client, get_sex, SexEnum
 from like.dependencies.database import db
 from like.exceptions.base import AppException
 from like.http_base import HttpResp
 from like.models import user_table
 from like.utils.urls import UrlUtil
+from like.utils.tools import ToolsUtil
 
 
 class IUserService(ABC):
@@ -29,6 +30,10 @@ class IUserService(ABC):
 
     @abstractmethod
     async def detail(self, detail_in: UserDetailIn) -> UserInfoOut:
+        pass
+
+    @abstractmethod
+    async def add(self, user_create_in: UserCreateIn):
         pass
 
 
@@ -106,6 +111,30 @@ class UserService(IUserService):
         result.sex = get_sex(int(result.sex))
         result.channel = get_login_client(int(result.channel))
         return result
+
+    async def add(self, user_create_in: UserCreateIn):
+        """用户新增"""
+        assert not await db.fetch_one(
+            user_table.select()
+            .where(user_table.c.username == user_create_in.username,
+                   user_table.c.is_delete == 0).limit(1)), '账号已存在换一个吧！'
+        assert not await db.fetch_one(
+            user_table.select()
+            .where(user_table.c.nickname == user_create_in.nickname,
+                   user_table.c.is_delete == 0).limit(1)), '昵称已存在换一个吧！'
+        if not (6 <= len(user_create_in.password) <= 20):
+            raise AppException(HttpResp.FAILED, msg='密码必须在6~20位')
+        create_dict = dict(user_create_in)
+        salt = ToolsUtil.random_string(5)
+        create_dict['salt'] = salt
+        create_dict['password'] = ToolsUtil.make_md5(f'{user_create_in.password.strip()}{salt}')
+        create_dict['avatar'] = await UrlUtil.to_relative_url(user_create_in.avatar) \
+            if user_create_in.avatar else '/api/static/backend_avatar.png'
+        create_dict['channel'] = int(user_create_in.channel)
+        create_dict['create_time'] = int(time.time())
+        create_dict['update_time'] = int(time.time())
+        await db.execute(user_table.insert().values(**create_dict))
+
 
     @classmethod
     async def instance(cls, ):

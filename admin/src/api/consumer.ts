@@ -5,6 +5,12 @@ export function getUserList(params: any) {
     return request.get({ url: '/user/list', params })
 }
 
+// 新增用户
+export function userAdd(params: any) {
+    return request.post({ url: '/user/add', params })
+}
+
+
 // 用户详情
 export function getUserDetail(params: any) {
     return request.get({ url: '/user/detail', params })

@@ -27,7 +27,8 @@ export enum ClientEnum {
     H5 = 3, // H5
     PC = 4, // PC
     IOS = 5, //苹果
-    ANDROID = 6 //安卓
+    ANDROID = 6, //安卓
+    BACKSTAGE = 7 //后台
 }
 
 export const ClientMap = {
@@ -36,5 +37,6 @@ export const ClientMap = {
     [ClientEnum.H5]: '手机H5',
     [ClientEnum.PC]: '电脑PC',
     [ClientEnum.IOS]: '苹果APP',
-    [ClientEnum.ANDROID]: '安卓APP'
+    [ClientEnum.ANDROID]: '安卓APP',
+    [ClientEnum.BACKSTAGE]: '后台'
 }

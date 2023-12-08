@@ -53,7 +53,8 @@ class LoginClientEnum(int, Enum):
     H5 = 3  # ("手机H5"),
     PC = 4  # ("电脑PC"),
     IOS = 5  # ("苹果APP"),
-    APK = 6  # ("安卓APP");
+    APK = 6  # ("安卓APP"),
+    BG = 7  # ("后台");
 
 
 def get_login_client(val):
@@ -66,6 +67,7 @@ def get_login_client(val):
         4: '电脑PC',
         5: '苹果APP',
         6: '安卓APP',
+        7: '后台',
     }
     return _dict.get(val, '未知')
 

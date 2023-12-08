@@ -35,7 +35,7 @@ class User(Base, TimestampMixin):
     sex = Column(mysql.TINYINT(1, unsigned=True), nullable=False, server_default=text('0'),
                  comment='用户性别: [1=男, 2=女]')
     channel = Column(mysql.TINYINT(1, unsigned=True), nullable=False, server_default=text('0'),
-                     comment='注册渠道: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP]')
+                     comment='注册渠道: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP, 7=后台]')
     is_disable = Column(mysql.TINYINT(0, unsigned=True), nullable=False, server_default=text('0'),
                         comment='是否禁用: [0=否, 1=是]')
     is_delete = Column(mysql.TINYINT(1, unsigned=True), nullable=False, server_default=text('0'),
@@ -64,7 +64,7 @@ class UserAuth(Base):
     openid = Column(String(200), unique=True, nullable=False, server_default='', comment='Openid')
     unionid = Column(String(200), nullable=False, server_default='', comment='Unionid')
     client = Column(mysql.TINYINT(1, unsigned=True), nullable=False, server_default=text('1'),
-                    comment='客户端类型: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP]')
+                    comment='客户端类型: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP, 7=后台]')
     create_time = Column(mysql.INTEGER(10, unsigned=True), nullable=False, server_default=text('0'), comment='创建时间')
     update_time = Column(mysql.INTEGER(10, unsigned=True), nullable=False, server_default=text('0'), comment='更新时间')
 

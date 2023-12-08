@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from like.admin.schemas.user import UserListIn, UserDetailIn, UserEditlIn
-from like.admin.service.user.user import IUserService, UserService, UserInfoOut
+from like.admin.service.user.user import IUserService, UserService, UserInfoOut, UserCreateIn
 from like.http_base import unified_resp
 from like.schema_base import PageInationResult
 
@@ -39,3 +39,11 @@ async def user_detail(edit_in: UserEditlIn,
     """
     return await user_service.edit(edit_in=edit_in)
 
+
+
+@router.post('/add')
+@unified_resp
+async def add(user_create_in: UserCreateIn,
+                     user_service: IUserService = Depends(UserService.instance)):
+    """新增"""
+    return await user_service.add(user_create_in)

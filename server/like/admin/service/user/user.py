@@ -125,6 +125,7 @@ class UserService(IUserService):
         if not (6 <= len(user_create_in.password) <= 20):
             raise AppException(HttpResp.FAILED, msg='密码必须在6~20位')
         create_dict = dict(user_create_in)
+        create_dict['sn'] = await self.rand_make_sn()
         salt = ToolsUtil.random_string(5)
         create_dict['salt'] = salt
         create_dict['password'] = ToolsUtil.make_md5(f'{user_create_in.password.strip()}{salt}')
@@ -135,6 +136,19 @@ class UserService(IUserService):
         create_dict['update_time'] = int(time.time())
         await db.execute(user_table.insert().values(**create_dict))
 
+    async def rand_make_sn(self):
+        """
+        生成随机端用户编号
+        :return:
+        """
+        while True:
+            sn = ToolsUtil.random_int(8)
+            user = await db.fetch_one(
+                select([user_table.c.id]).select_from(user_table).where(
+                    user_table.c.is_delete == 0, user_table.c.sn == sn).limit(1))
+            if not user:
+                break
+        return sn
 
     @classmethod
     async def instance(cls, ):

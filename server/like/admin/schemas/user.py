@@ -15,6 +15,7 @@ class UserListIn(BaseModel):
         default='')  # 客户端类型: [1=微信小程序, 2=微信公众号, 3=手机H5；4=电脑PC, 5=苹果APP, 6=安卓APP, 7=后台]
     start_time: Union[date, datetime, None, EmptyStrToNone] = Query(alias='startTime')  # 开始时间
     end_time: Union[date, datetime, None, EmptyStrToNone] = Query(alias='endTime')  # 结束时间
+    is_disable:Union[int, None, EmptyStrToNone] = Query(gt=0,alias='isDisable')  # 状态
 
 
 class UserDetailIn(BaseModel):
@@ -42,7 +43,7 @@ class UserInfoOut(BaseModel):
     sex: str
     motto: str
     channel: str
-    is_disable: int = Field(alias='is_disable', ge=0, le=1)
+    isDisable: int = Field(alias='is_disable', ge=0, le=1)
     lastLoginIp: str = Field(alias='last_login_ip')
     lastLoginTime: datetime = Field(alias='last_login_time')  # 最后登录时间
     createTime: datetime = Field(alias='create_time')  # 创建时间

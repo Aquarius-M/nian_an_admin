@@ -14,6 +14,11 @@
                         <el-option v-for="(item, key) in ClientMap" :key="key" :label="item" :value="key" />
                     </el-select>
                 </el-form-item>
+                <el-form-item label="状态">
+                    <el-select class="w-[280px]" v-model="queryParams.isDisable">
+                        <el-option v-for="(item, key) in StatusMap" :key="key" :label="item" :value="key" />
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">查询</el-button>
                     <el-button @click="resetParams">重置</el-button>
@@ -49,13 +54,12 @@
                     </el-table-column>
                     <el-table-column label="昵称" prop="nickname" min-width="100" />
                     <el-table-column label="账号" prop="username" min-width="120" />
-                    <el-table-column label="手机号码" prop="mobile" min-width="100" />
                     <el-table-column label="性别" prop="sex" min-width="100" />
                     <el-table-column label="注册来源" prop="channel" min-width="100" />
                     <el-table-column label="注册时间" prop="createTime" min-width="120" />
                     <el-table-column label="状态" min-width="100">
                         <template #default="{ row }">
-                            <el-switch :model-value="row.is_disable" :active-value="0" :inactive-value="1"
+                            <el-switch :model-value="row.isDisable" :active-value="0" :inactive-value="1"
                                 v-perms="['user:disable']" @change="($event) => changeStatus($event, row.id)" />
                         </template>
                     </el-table-column>
@@ -86,7 +90,7 @@
 import { usePaging } from '@/hooks/usePaging'
 import { getRoutePath } from '@/router'
 import { getUserList, userStatus, userDel } from '@/api/consumer'
-import { ClientMap } from '@/enums/appEnums'
+import { ClientMap, StatusMap } from '@/enums/appEnums'
 import EditPopup from './add.vue'
 import feedback from '@/utils/feedback'
 import { onActivated, onMounted } from 'vue'
@@ -97,7 +101,8 @@ const queryParams = reactive({
     keyword: '',
     channel: '',
     startTime: '',
-    endTime: ''
+    endTime: '',
+    isDisable: '',
 })
 
 const showEdit = ref(false)

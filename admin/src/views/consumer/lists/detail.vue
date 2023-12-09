@@ -81,7 +81,7 @@
                 <el-form-item label="注册时间："> {{ formData.createTime }} </el-form-item>
                 <el-form-item label="最近登录时间："> {{ formData.lastLoginTime }} </el-form-item>
                 <el-form-item label="状态：" min-width="100">
-                    <el-switch :model-value="formData.is_disable" :active-value="0" :inactive-value="1"
+                    <el-switch :model-value="formData.isDisable" :active-value="0" :inactive-value="1"
                         v-perms="['user:detail:disable']" @change="($event) => changeStatus($event, formData.id)" />
                 </el-form-item>
             </el-form>
@@ -110,7 +110,7 @@ const formData = reactive({
     createTime: '',
     lastLoginIp: '',
     lastLoginTime: '',
-    is_disable: 0,
+    isDisable: 0,
 })
 
 const formRef = shallowRef<FormInstance>()

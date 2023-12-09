@@ -40,3 +40,8 @@ export const ClientMap = {
     [ClientEnum.ANDROID]: '安卓APP',
     [ClientEnum.BACKSTAGE]: '后台'
 }
+
+export const StatusMap = {
+    [0]: '启用',
+    [1]: '封禁',
+}

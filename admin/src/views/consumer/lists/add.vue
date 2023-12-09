@@ -87,7 +87,7 @@ const formData = reactive({
     real_name: '',
     channel: 7,
     sex: 0,
-    is_disable: 0,
+    isDisable: 0,
     motto: '',
 })
 

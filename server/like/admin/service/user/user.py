@@ -57,7 +57,10 @@ class UserService(IUserService):
             where.append(user_table.c.create_time >= int(time.mktime(list_in.start_time.timetuple())))
         if list_in.end_time:
             where.append(user_table.c.create_time <= int(time.mktime(list_in.end_time.timetuple())))
-        query = select(self.select_columns).select_from(user_table).where(*where).order_by(user_table.c.id.desc())
+        print(list_in.is_disable)
+        if list_in.is_disable:
+            where.append(user_table.c.is_disable == list_in.is_disable)
+        query = select(self.select_columns).select_from(user_table).where(*where).order_by(user_table.c.id.desc())        
 
         user_list_pages = await paginate(db, query)
         for row in user_list_pages.lists:

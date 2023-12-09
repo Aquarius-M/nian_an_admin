@@ -59,6 +59,15 @@
                                     详情
                                 </router-link>
                             </el-button>
+                            <el-button
+                                v-if="row.id != 1"
+                                v-perms="['user:del']"
+                                type="danger"
+                                link
+                                @click="handleDelete(row.id)"
+                            >
+                                删除
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -73,7 +82,7 @@
 <script lang="ts" setup name="consumerLists">
 import { usePaging } from '@/hooks/usePaging'
 import { getRoutePath } from '@/router'
-import { getUserList, userStatus } from '@/api/consumer'
+import { getUserList, userStatus, userDel } from '@/api/consumer'
 import { ClientMap } from '@/enums/appEnums'
 import EditPopup from './add.vue'
 import feedback from '@/utils/feedback'
@@ -98,6 +107,13 @@ const handleAdd = async () => {
     showEdit.value = true
     await nextTick()
     editRef.value?.open('add')
+}
+
+const handleDelete = async (id: number) => {
+    await feedback.confirm('确定要删除？')
+    await userDel({ id })
+    feedback.msgSuccess('删除成功')
+    getLists()
 }
 
 const changeStatus = async (active: any, id: number) => {

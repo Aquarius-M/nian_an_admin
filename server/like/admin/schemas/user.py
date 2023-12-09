@@ -58,6 +58,9 @@ class UserCreateIn(BaseModel):
     mobile: str
     real_name: str
 
+class UserDelIn(BaseModel):
+    """用户删除参数"""
+    id: int = Field(gt=0)  # 主键
 
 class UserDisableIn(BaseModel):
     """用户状态切换参数"""

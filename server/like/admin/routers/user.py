@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from like.admin.schemas.user import UserListIn, UserDetailIn, UserEditlIn, UserDisableIn
+from like.admin.schemas.user import UserListIn, UserDetailIn, UserEditlIn, UserDisableIn, UserDelIn
 from like.admin.service.user.user import IUserService, UserService, UserInfoOut, UserCreateIn
 from like.http_base import unified_resp
 from like.schema_base import PageInationResult
@@ -49,6 +49,13 @@ async def add(user_create_in: UserCreateIn,
     """新增"""
     return await user_service.add(user_create_in)
 
+
+@router.post('/del', dependencies=[Depends(record_log(title='用户删除'))])
+@unified_resp
+async def user_del(user_del_in: UserDelIn,
+                    auth_service: IUserService = Depends(UserService.instance)):
+    """用户删除"""
+    return await auth_service.delete(user_del_in.id)
 
 @router.post('/disable', dependencies=[Depends(record_log(title='用户状态切换'))])
 @unified_resp

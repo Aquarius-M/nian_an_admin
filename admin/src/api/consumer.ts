@@ -10,6 +10,10 @@ export function userAdd(params: any) {
     return request.post({ url: '/user/add', params })
 }
 
+// 删除用户
+export function userDel(params: any) {
+    return request.post({ url: '/user/del', params })
+}
 
 // 用户详情
 export function getUserDetail(params: any) {

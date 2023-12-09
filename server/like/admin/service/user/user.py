@@ -156,6 +156,17 @@ class UserService(IUserService):
             if not user:
                 break
         return sn
+    
+
+    async def delete(self, id_: int):
+        """用户删除"""
+        assert await db.fetch_one(
+            user_table.select()
+            .where(user_table.c.id == id_, user_table.c.is_delete == 0)
+            .limit(1)), '账号已不存在!'
+        await db.execute(user_table.update()
+                         .where(user_table.c.id == id_)
+                         .values(is_delete=1, delete_time=int(time.time())))
 
     async def disable(self, id_: int):
         """用户状态切换"""

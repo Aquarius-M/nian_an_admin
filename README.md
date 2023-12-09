@@ -60,4 +60,4 @@
 
 
 
-# 将tips文件加内的复制进node_modules
+# m1 mac中 将tips下的文件复制进uniapp的node_modules

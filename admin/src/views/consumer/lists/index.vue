@@ -27,8 +27,20 @@
                 </template>
                 新增
             </el-button>
+            <el-button
+                    v-perms="['user:del']"
+                    :disabled="!selectData.length"
+                    type="danger"
+                    @click="handleDelete(selectData)"
+                >
+                    <template #icon>
+                        <icon name="el-icon-Delete" />
+                    </template>
+                    删除
+                </el-button>
             <div class="mt-4">
-                <el-table size="large" v-loading="pager.loading" :data="pager.lists">
+                <el-table size="large" v-loading="pager.loading" :data="pager.lists" @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="55" />
                     <el-table-column label="用户编号" prop="sn" min-width="120" />
                     <el-table-column label="头像" min-width="100">
                         <template #default="{ row }">
@@ -58,15 +70,6 @@
                                 }">
                                     详情
                                 </router-link>
-                            </el-button>
-                            <el-button
-                                v-if="row.id != 1"
-                                v-perms="['user:del']"
-                                type="danger"
-                                link
-                                @click="handleDelete(row.id)"
-                            >
-                                删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -109,9 +112,15 @@ const handleAdd = async () => {
     editRef.value?.open('add')
 }
 
-const handleDelete = async (id: number) => {
+const selectData = ref<any[]>([])
+
+const handleSelectionChange = (val: any[]) => {
+    selectData.value = val.map(({ id }) => id)
+}
+
+const handleDelete = async (ids: any[]) => {
     await feedback.confirm('确定要删除？')
-    await userDel({ id })
+    await userDel({ ids })
     feedback.msgSuccess('删除成功')
     getLists()
 }

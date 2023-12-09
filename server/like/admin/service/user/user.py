@@ -7,7 +7,7 @@ from fastapi_pagination.bases import AbstractPage
 from fastapi_pagination.ext.databases import paginate
 from sqlalchemy import select, or_
 
-from like.admin.schemas.user import UserListIn, UserInfoOut, UserEditlIn, UserDetailIn,UserCreateIn
+from like.admin.schemas.user import UserListIn, UserInfoOut, UserEditlIn, UserDetailIn,UserCreateIn, UserDelIn
 from like.common.enums import get_login_client, get_sex, SexEnum
 from like.dependencies.database import db
 from like.exceptions.base import AppException
@@ -158,14 +158,15 @@ class UserService(IUserService):
         return sn
     
 
-    async def delete(self, id_: int):
+    async def delete(self, delete_in: UserDelIn):
         """用户删除"""
         assert await db.fetch_one(
             user_table.select()
-            .where(user_table.c.id == id_, user_table.c.is_delete == 0)
+            .where(user_table.c.id.in_(delete_in.ids))
+            .where(user_table.c.is_delete == 0)
             .limit(1)), '账号已不存在!'
         await db.execute(user_table.update()
-                         .where(user_table.c.id == id_)
+                         .where(user_table.c.id.in_(delete_in.ids))
                          .values(is_delete=1, delete_time=int(time.time())))
 
     async def disable(self, id_: int):

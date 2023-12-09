@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Union
+from typing import List, Union
 
 from fastapi import Query
 from pydantic import BaseModel, Field
@@ -60,7 +60,7 @@ class UserCreateIn(BaseModel):
 
 class UserDelIn(BaseModel):
     """用户删除参数"""
-    id: int = Field(gt=0)  # 主键
+    ids: List[int]
 
 class UserDisableIn(BaseModel):
     """用户状态切换参数"""

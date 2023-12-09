@@ -73,25 +73,6 @@
                 </div>
             </el-card>
         </div>
-        <div class="function mb-4">
-            <el-card class="flex-1 !border-none" shadow="never">
-                <template #header>
-                    <span>常用功能</span>
-                </template>
-                <div class="flex flex-wrap">
-                    <div
-                        v-for="item in workbenchData.menu"
-                        class="md:w-[12.5%] w-1/4 flex flex-col items-center"
-                        :key="item"
-                    >
-                        <router-link :to="item.url" class="mb-3 flex flex-col items-center">
-                            <img width="40" height="40" :src="item.image" />
-                            <div class="mt-2">{{ item.name }}</div>
-                        </router-link>
-                    </div>
-                </div>
-            </el-card>
-        </div>
         <div class="md:flex">
             <el-card class="flex-1 !border-none md:mr-4 mb-4" shadow="never">
                 <template #header>
@@ -105,7 +86,7 @@
                     />
                 </div>
             </el-card>
-            <el-card class="!border-none mb-4" shadow="never">
+            <!-- <el-card class="!border-none mb-4" shadow="never">
                 <template #header>
                     <span>服务支持</span>
                 </template>
@@ -123,6 +104,25 @@
                                 <div class="text-tx-regular text-xs mt-4">{{ item.desc }}</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </el-card> -->
+        </div>
+        <div class="function mb-4">
+            <el-card class="flex-1 !border-none" shadow="never">
+                <template #header>
+                    <span>常用功能</span>
+                </template>
+                <div class="flex flex-wrap">
+                    <div
+                        v-for="item in workbenchData.menu"
+                        class="md:w-[12.5%] w-1/4 flex flex-col items-center"
+                        :key="item"
+                    >
+                        <router-link :to="item.url" class="mb-3 flex flex-col items-center">
+                            <img width="40" height="40" :src="item.image" />
+                            <div class="mt-2">{{ item.name }}</div>
+                        </router-link>
                     </div>
                 </div>
             </el-card>
@@ -174,14 +174,29 @@ const workbenchData: any = reactive({
             url: '/permission/admin'
         },
         {
+            name: '用户管理',
+            image: menu_role,
+            url: '/consumer/lists'
+        },
+        {
+            name: '网站信息',
+            image: menu_web,
+            url: '/setting/website/information'
+        },
+        {
+            name: '素材中心',
+            image: menu_file,
+            url: '/material/index'
+        },
+        {
             name: '角色管理',
             image: menu_role,
             url: '/permission/role'
         },
         {
-            name: '部门管理',
-            image: menu_dept,
-            url: '/organization/department'
+            name: '菜单管理',
+            image: menu_auth,
+            url: '/permission/menu'
         },
         {
             name: '字典管理',
@@ -192,21 +207,6 @@ const workbenchData: any = reactive({
             name: '代码生成器',
             image: menu_generator,
             url: '/dev_tools/code'
-        },
-        {
-            name: '素材中心',
-            image: menu_file,
-            url: '/material/index'
-        },
-        {
-            name: '菜单权限',
-            image: menu_auth,
-            url: '/permission/menu'
-        },
-        {
-            name: '网站信息',
-            image: menu_web,
-            url: '/setting/website/information'
         }
     ], // 常用功能
     visitor: [], // 访问量

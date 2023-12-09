@@ -55,7 +55,7 @@ async def add(user_create_in: UserCreateIn,
 async def user_del(user_del_in: UserDelIn,
                     auth_service: IUserService = Depends(UserService.instance)):
     """用户删除"""
-    return await auth_service.delete(user_del_in.id)
+    return await auth_service.delete(user_del_in)
 
 @router.post('/disable', dependencies=[Depends(record_log(title='用户状态切换'))])
 @unified_resp

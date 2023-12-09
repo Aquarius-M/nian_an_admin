@@ -40,7 +40,9 @@ class UserInfoOut(BaseModel):
     username: str
     mobile: str
     sex: str
+    motto: str
     channel: str
+    is_disable: int = Field(alias='is_disable', ge=0, le=1)
     lastLoginIp: str = Field(alias='last_login_ip')
     lastLoginTime: datetime = Field(alias='last_login_time')  # 最后登录时间
     createTime: datetime = Field(alias='create_time')  # 创建时间
@@ -52,3 +54,8 @@ class UserCreateIn(BaseModel):
     nickname: str = Field(min_length=2, max_length=30)  # 昵称
     password: str  #用户密码
     channel: str #渠道
+
+
+class UserDisableIn(BaseModel):
+    """用户状态切换参数"""
+    id: int = Field(gt=0)  # 主键

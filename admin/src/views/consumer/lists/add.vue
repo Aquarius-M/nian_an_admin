@@ -81,7 +81,8 @@ const formData = reactive({
     mobile: '',
     realName: '',
     channel: 7,
-    sex: 0
+    sex: 0,
+    is_disable: 0,
 })
 
 
@@ -128,6 +129,7 @@ const formRules = reactive({
 })
 
 const handleSubmit = async () => {
+    console.log(formData)
     await formRef.value?.validate()
     await userAdd(formData)
     popupRef.value?.close()

@@ -34,6 +34,7 @@ class User(Base, TimestampMixin):
     salt = Column(String(32), nullable=False, server_default='', comment='加密盐巴')
     sex = Column(mysql.TINYINT(1, unsigned=True), nullable=False, server_default=text('0'),
                  comment='用户性别: [1=男, 2=女]')
+    motto = Column(String(300), nullable=False, server_default='', comment='座右铭')
     channel = Column(mysql.TINYINT(1, unsigned=True), nullable=False, server_default=text('0'),
                      comment='注册渠道: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP, 7=后台]')
     is_disable = Column(mysql.TINYINT(0, unsigned=True), nullable=False, server_default=text('0'),

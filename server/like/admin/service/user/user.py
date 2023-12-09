@@ -41,8 +41,8 @@ class UserService(IUserService):
     """用户信息类"""
     select_columns = [user_table.c.id, user_table.c.nickname, user_table.c.channel, user_table.c.sn,
                       user_table.c.avatar, user_table.c.real_name, user_table.c.username, user_table.c.mobile,
-                      user_table.c.sex, user_table.c.last_login_ip, user_table.c.last_login_time,
-                      user_table.c.is_delete, user_table.c.create_time, user_table.c.update_time]
+                      user_table.c.sex, user_table.c.motto, user_table.c.last_login_ip, user_table.c.last_login_time,
+                      user_table.c.is_disable,user_table.c.is_delete, user_table.c.create_time, user_table.c.update_time]
 
     async def list(self, list_in: UserListIn) -> AbstractPage[UserInfoOut]:
         where = [user_table.c.is_delete == 0]
@@ -60,6 +60,7 @@ class UserService(IUserService):
 
         user_list_pages = await paginate(db, query)
         for row in user_list_pages.lists:
+            print(row)
             row.avatar = await UrlUtil.to_absolute_url(row.avatar)
             row.sex = get_sex(int(row.sex))
             row.channel = get_login_client(int(row.channel))
@@ -136,7 +137,7 @@ class UserService(IUserService):
         create_dict['salt'] = salt
         create_dict['password'] = ToolsUtil.make_md5(f'{user_create_in.password.strip()}{salt}')
         create_dict['avatar'] = await UrlUtil.to_relative_url(user_create_in.avatar) \
-            if user_create_in.avatar else '/api/static/backend_avatar.png'
+            if user_create_in.avatar else '/api/static/default_avatar.png'
         create_dict['channel'] = int(user_create_in.channel)
         create_dict['create_time'] = int(time.time())
         create_dict['update_time'] = int(time.time())
@@ -155,6 +156,18 @@ class UserService(IUserService):
             if not user:
                 break
         return sn
+
+    async def disable(self, id_: int):
+        """用户状态切换"""
+        user = await db.fetch_one(
+            user_table.select()
+            .where(user_table.c.id == id_, user_table.c.is_delete == 0)
+            .limit(1))
+        assert user, '账号已不存在!'
+        await db.execute(user_table.update()
+                         .where(user_table.c.id == id_)
+                         .values(is_disable=1 if user.is_disable == 0 else 0,
+                                 update_time=int(time.time())))
 
     @classmethod
     async def instance(cls, ):

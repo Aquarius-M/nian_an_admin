@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends
 
-from like.admin.schemas.user import UserListIn, UserDetailIn, UserEditlIn
+from like.admin.schemas.user import UserListIn, UserDetailIn, UserEditlIn, UserDisableIn
 from like.admin.service.user.user import IUserService, UserService, UserInfoOut, UserCreateIn
 from like.http_base import unified_resp
 from like.schema_base import PageInationResult
+from like.dependencies.log import record_log
 
 router = APIRouter(prefix='/user')
 
@@ -41,9 +42,17 @@ async def user_detail(edit_in: UserEditlIn,
 
 
 
-@router.post('/add')
+@router.post('/add', dependencies=[Depends(record_log(title='用户新增'))])
 @unified_resp
 async def add(user_create_in: UserCreateIn,
                      user_service: IUserService = Depends(UserService.instance)):
     """新增"""
     return await user_service.add(user_create_in)
+
+
+@router.post('/disable', dependencies=[Depends(record_log(title='用户状态切换'))])
+@unified_resp
+async def user_disable(user_disable_in: UserDisableIn,
+                        auth_service: IUserService = Depends(UserService.instance)):
+    """用户状态切换"""
+    return await auth_service.disable(user_disable_in.id)

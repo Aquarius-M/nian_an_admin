@@ -59,3 +59,5 @@
 </center> <br>
 
 
+
+# 将tips文件加内的复制进node_modules

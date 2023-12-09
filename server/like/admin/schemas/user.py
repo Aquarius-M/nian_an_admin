@@ -54,6 +54,9 @@ class UserCreateIn(BaseModel):
     nickname: str = Field(min_length=2, max_length=30)  # 昵称
     password: str  #用户密码
     channel: str #渠道
+    sex: int
+    mobile: str
+    real_name: str
 
 
 class UserDisableIn(BaseModel):

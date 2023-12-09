@@ -15,6 +15,7 @@ from like.http_base import HttpResp
 from like.models import user_table
 from like.utils.urls import UrlUtil
 from like.utils.tools import ToolsUtil
+from like.utils.config import ConfigUtil
 
 
 class IUserService(ABC):
@@ -60,7 +61,6 @@ class UserService(IUserService):
 
         user_list_pages = await paginate(db, query)
         for row in user_list_pages.lists:
-            print(row)
             row.avatar = await UrlUtil.to_absolute_url(row.avatar)
             row.sex = get_sex(int(row.sex))
             row.channel = get_login_client(int(row.channel))
@@ -77,23 +77,22 @@ class UserService(IUserService):
                 select([user_table.c.id]).select_from(user_table).where(
                     user_table.c.nickname == edit_in.value, user_table.c.is_delete == 0).limit(1)), '当前昵称已存在！'
 
-        elif edit_in.field == 'username':
-            assert len(edit_in.value) <= 32, '账号不能超过32个字符'
-            assert not await db.fetch_one(
-                select([user_table.c.id]).select_from(user_table).where(
-                    user_table.c.username == edit_in.value, user_table.c.is_delete == 0).limit(1)), '当前账号已存在！'
-
         elif edit_in.field == 'realName':
             edit_in.field = 'real_name'
             assert len(edit_in.value) <= 32, '真实姓名不能超过32个字符'
 
         elif edit_in.field == 'mobile':
             assert re.match("^[1][3,4,5,6,7,8,9][0-9]{9}$", edit_in.value), '手机号格式不正确'
+
         elif edit_in.field == 'sex':
             if isinstance(edit_in.value, str):
                 assert edit_in.value.isdigit(), '性别输入错误'
                 edit_in.value = int(edit_in.value)
             assert edit_in.value in SexEnum.key_list(), '性别输入错误'
+
+        elif edit_in.field == 'motto':
+            assert len(edit_in.value) <= 300, '个性签名不能超过300个字符'
+            
         else:
             raise AppException(HttpResp.FAILED, msg='不被支持的字段类型')
 
@@ -137,10 +136,11 @@ class UserService(IUserService):
         create_dict['salt'] = salt
         create_dict['password'] = ToolsUtil.make_md5(f'{user_create_in.password.strip()}{salt}')
         create_dict['avatar'] = await UrlUtil.to_relative_url(user_create_in.avatar) \
-            if user_create_in.avatar else '/api/static/default_avatar.png'
+            if user_create_in.avatar else (await ConfigUtil.get_val('user', 'defaultAvatar', '/api/static/default_avatar.png'))
         create_dict['channel'] = int(user_create_in.channel)
         create_dict['create_time'] = int(time.time())
         create_dict['update_time'] = int(time.time())
+        print(create_dict)
         await db.execute(user_table.insert().values(**create_dict))
 
     async def rand_make_sn(self):

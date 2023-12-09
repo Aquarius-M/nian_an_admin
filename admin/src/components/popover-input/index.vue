@@ -1,44 +1,17 @@
 <template>
     <div @mouseenter="inPopover = true" @mouseleave="inPopover = false">
-        <el-popover
-            placement="top"
-            v-model:visible="visible"
-            :width="width"
-            trigger="contextmenu"
-            class="popover-input"
-            :teleported="teleported"
-            :persistent="false"
-            popper-class="!p-0"
-        >
-            <div class="flex p-3" @click.stop="">
-                <div class="popover-input__input mr-[10px] flex-1">
-                    <el-select
-                        class="flex-1"
-                        :size="size"
-                        v-if="type == 'select'"
-                        v-model="inputValue"
-                        :teleported="teleported"
-                    >
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                    <el-input
-                        v-else
-                        v-model.trim="inputValue"
-                        :maxlength="limit"
-                        :show-word-limit="showLimit"
-                        :type="type"
-                        :size="size"
-                        clearable
-                        :placeholder="placeholder"
-                    />
+        <el-popover placement="right" v-model:visible="visible" :width="buildWidth"
+            trigger="contextmenu" class="popover-input" :teleported="teleported" :persistent="false" popper-class="!p-0">
+            <div class="flex p-3" @click.stop>
+                <div class="popover-input__input mr-[10px] flex-1" @click.stop>
+                    <el-radio-group v-if="type == 'select'" v-model="inputValue" class="ml-4">
+                        <el-radio v-for="item in options" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
+                    </el-radio-group>
+                    <el-input v-else v-model.trim="inputValue" :maxlength="limit" :show-word-limit="showLimit" :type="type"
+                        :size="size" clearable :placeholder="placeholder" resize="none" :rows="5"/>
                 </div>
-                <div class="popover-input__btns flex-none">
-                    <el-button link @click="close">取消</el-button>
+                <div class="popover-input__btns flex btn_position">
+                    <el-button :size="size" @click="close">取消</el-button>
                     <el-button type="primary" :size="size" @click="handleConfirm">确定</el-button>
                 </div>
             </div>
@@ -111,6 +84,10 @@ const close = () => {
     visible.value = false
 }
 
+const buildWidth = computed(() => {
+        return props.type == 'select' ? '400px' : props.type == 'textarea' ? '600px' : props.width
+    })
+
 watch(
     () => props.value,
     (value) => {
@@ -127,4 +104,8 @@ useEventListener(document.documentElement, 'click', () => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.btn_position {
+    align-items: flex-end;
+}
+</style>

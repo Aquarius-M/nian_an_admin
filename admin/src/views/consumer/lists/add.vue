@@ -29,22 +29,10 @@
                 </el-form-item>
 
                 <el-form-item label="性别" prop="sex">
-                    <el-select v-model="formData.sex" class="flex-1" clearable :value="formData.sex"
-                        placeholder="请选择性别">
-                        <el-option v-for="(item, index) in [
-                            {
-                                label: '未知',
-                                index: 0
-                            },
-                            {
-                                label: '男',
-                                index: 1
-                            },
-                            {
-                                label: '女',
-                                index: 2
-                            }
-                        ]" :key="index" :label="item.label" :value="item.index" />
+                    <el-select v-model="formData.sex" class="flex-1" clearable :value="formData.sex" placeholder="请选择性别"
+                        @change="handleEdit">
+                        <el-option v-for="(item, index) in sexOptions " :label="item.label" :value="item.index"
+                            :key="index" />
                     </el-select>
                 </el-form-item>
 
@@ -53,7 +41,7 @@
                 </el-form-item>
 
                 <el-form-item label="真实姓名：" prop="realName">
-                    <el-input v-model="formData.realName" placeholder="请输入真实姓名" clearable />
+                    <el-input v-model="formData.real_name" placeholder="请输入真实姓名" clearable />
                 </el-form-item>
             </el-form>
         </popup>
@@ -64,12 +52,29 @@ import type { FormInstance } from 'element-plus'
 import Popup from '@/components/popup/index.vue'
 import feedback from '@/utils/feedback'
 import { getUserDetail, userAdd, userEdit } from '@/api/consumer'
+import { getUserSetup, } from '@/api/setting/user'
+
 const emit = defineEmits(['success', 'close'])
 const formRef = shallowRef<FormInstance>()
 const popupRef = shallowRef<InstanceType<typeof Popup>>()
 const popupTitle = computed(() => {
     return '新增用户'
 })
+
+const sexOptions = [
+    {
+        label: '未知',
+        index: 0
+    },
+    {
+        label: '男',
+        index: 1
+    },
+    {
+        label: '女',
+        index: 2
+    }
+]
 
 const formData = reactive({
     id: '',
@@ -79,12 +84,26 @@ const formData = reactive({
     password: '',
     passwordConfirm: '',
     mobile: '',
-    realName: '',
+    real_name: '',
     channel: 7,
     sex: 0,
     is_disable: 0,
+    motto: '',
 })
 
+// 获取用户设置数据
+const getData = async () => {
+    try {
+        const data = await getUserSetup()
+        formData["avatar"] = data["defaultAvatar"]
+    } catch (error) {
+        console.log('获取=>', error)
+    }
+}
+
+const handleEdit = (value: number) => {
+    formData.sex = value;
+}
 
 const passwordConfirmValidator = (rule: object, value: string, callback: any) => {
     if (formData.password) {
@@ -148,4 +167,5 @@ const handleClose = () => {
 defineExpose({
     open,
 })
+getData()
 </script>

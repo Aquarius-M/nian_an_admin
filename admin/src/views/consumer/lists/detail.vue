@@ -70,7 +70,7 @@
                 <el-form-item label="个性签名">
                     {{ formData.motto || '-' }}
                     <popover-input class="ml-[10px]" :value="formData.motto" :limit="300"
-                        @confirm="handleEdit($event, 'motto')">
+                        @confirm="handleEdit($event, 'motto')" type="textarea" :show-limit="true">
                         <el-button type="primary" link v-perms="['user:edit']">
                             <icon name="el-icon-EditPen" />
                         </el-button>

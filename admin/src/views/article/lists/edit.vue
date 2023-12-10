@@ -99,7 +99,7 @@
                     </div>
                     <div class="xl:ml-20">
                         <el-form-item label="文章内容" required prop="content">
-                            <editor v-model="formData.content" :height="667" :width="375" />
+                            <editor v-model="formData.content" :height="667"/>
                         </el-form-item>
                     </div>
                 </div>

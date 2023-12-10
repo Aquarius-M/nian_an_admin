@@ -4,21 +4,16 @@
             <div class="flex h-full items-start">
                 <div class="pages-preview mx-[30px]">
                     <div class="tabbar flex">
-                        <div
-                            class="tabbar-item flex flex-col justify-center items-center flex-1"
-                            v-for="(item, index) in tabbar.list"
-                            :key="index"
-                            :style="{ color: tabbar.style.defaultColor }"
-                        >
-                            <img class="w-[22px] h-[22px]" :src="item.unselected" alt="" />
+                        <div class="tabbar-item flex flex-col justify-center items-center flex-1"
+                            v-for="(item, index) in tabbar.list" :key="index" :style="{ color: tabbar.style.defaultColor }">
+                            <img class="w-[22px] h-[22px]" :src="getCurrentImage(item.unselected)" alt="" />
                             <div class="leading-3 text-[12px] mt-[4px]">{{ item.name }}</div>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1">
                     <div
-                        class="title flex items-center before:w-[3px] before:h-[14px] before:block before:bg-primary before:mr-2"
-                    >
+                        class="title flex items-center before:w-[3px] before:h-[14px] before:block before:bg-primary before:mr-2">
                         底部导航设置
                         <span class="form-tips ml-[10px] !mt-0">
                             至少添加2个导航，最多添加5个导航
@@ -28,53 +23,29 @@
                         <el-tabs model-value="content">
                             <el-tab-pane label="导航图片" name="content">
                                 <div class="mb-[18px]">
-                                    <draggable
-                                        class="draggable"
-                                        v-model="tabbar.list"
-                                        animation="300"
-                                        draggable=".draggable"
-                                        :move="onMove"
-                                    >
+                                    <draggable class="draggable" v-model="tabbar.list" animation="300"
+                                        draggable=".draggable" :move="onMove">
                                         <template v-slot:item="{ element, index }">
-                                            <del-wrap
-                                                @close="handleDelete(index)"
-                                                class="max-w-[400px]"
-                                                :class="{ draggable: index != 0 }"
-                                            >
+                                            <del-wrap @close="handleDelete(index)" class="max-w-[400px]"
+                                                :class="{ draggable: index != 0 }">
                                                 <div class="bg-fill-light w-full p-4 mt-4">
                                                     <el-form-item label="导航图标">
-                                                        <material-picker
-                                                            v-model="element.unselected"
-                                                            upload-class="bg-body"
-                                                            size="60px"
-                                                        >
+                                                        <material-picker v-model="element.unselected" upload-class="bg-body"
+                                                            size="60px">
                                                             <template #upload>
-                                                                <div
-                                                                    class="upload-btn w-[60px] h-[60px]"
-                                                                >
-                                                                    <icon
-                                                                        name="el-icon-Plus"
-                                                                        :size="16"
-                                                                    />
+                                                                <div class="upload-btn w-[60px] h-[60px]">
+                                                                    <icon name="el-icon-Plus" :size="16" />
                                                                     <span class="text-xs leading-5">
                                                                         未选中
                                                                     </span>
                                                                 </div>
                                                             </template>
                                                         </material-picker>
-                                                        <material-picker
-                                                            v-model="element.selected"
-                                                            upload-class="bg-body"
-                                                            size="60px"
-                                                        >
+                                                        <material-picker v-model="element.selected" upload-class="bg-body"
+                                                            size="60px">
                                                             <template #upload>
-                                                                <div
-                                                                    class="upload-btn w-[60px] h-[60px]"
-                                                                >
-                                                                    <icon
-                                                                        name="el-icon-Plus"
-                                                                        :size="16"
-                                                                    />
+                                                                <div class="upload-btn w-[60px] h-[60px]">
+                                                                    <icon name="el-icon-Plus" :size="16" />
                                                                     <span class="text-xs leading-5">
                                                                         选中
                                                                     </span>
@@ -83,16 +54,10 @@
                                                         </material-picker>
                                                     </el-form-item>
                                                     <el-form-item label="导航名称">
-                                                        <el-input
-                                                            v-model="element.name"
-                                                            placeholder="请输入名称"
-                                                        />
+                                                        <el-input v-model="element.name" placeholder="请输入名称" />
                                                     </el-form-item>
                                                     <el-form-item label="链接地址">
-                                                        <link-picker
-                                                            v-model="element.link"
-                                                            :disabled="index == 0"
-                                                        />
+                                                        <link-picker v-model="element.link" :disabled="index == 0" />
                                                     </el-form-item>
                                                 </div>
                                             </del-wrap>
@@ -108,18 +73,12 @@
                             </el-tab-pane>
                             <el-tab-pane label="样式设置" name="styles">
                                 <el-form-item label="默认颜色">
-                                    <color-picker
-                                        class="max-w-[400px]"
-                                        v-model="tabbar.style.defaultColor"
-                                        default-color="#999999"
-                                    />
+                                    <color-picker class="max-w-[400px]" v-model="tabbar.style.defaultColor"
+                                        default-color="#999999" />
                                 </el-form-item>
                                 <el-form-item label="选中颜色">
-                                    <color-picker
-                                        class="max-w-[400px]"
-                                        v-model="tabbar.style.selectedColor"
-                                        default-color="#4173ff"
-                                    />
+                                    <color-picker class="max-w-[400px]" v-model="tabbar.style.selectedColor"
+                                        default-color="#4173ff" />
                                 </el-form-item>
                             </el-tab-pane>
                         </el-tabs>
@@ -137,7 +96,7 @@ import { getDecorateTabbar, setDecorateTabbar } from '@/api/decoration'
 import feedback from '@/utils/feedback'
 import Draggable from 'vuedraggable'
 import useAppStore from '@/stores/modules/app'
-const { getImageUrl, getimageUrl } = useAppStore()
+const { getCurrentImage } = useAppStore()
 const max = 5
 const min = 2
 const tabbar = reactive({
@@ -186,21 +145,14 @@ const onMove = (e: any) => {
     }
     return true
 }
-const appStore = useAppStore()
 const getData = async () => {
     const data = await getDecorateTabbar()
     tabbar.list = data.list.map((item: any) => ({
         ...item,
         link: JSON.parse(item.link),
         //TODO
-        selected: item.selected.includes('api/uploads')
-            ? appStore.config.ossDomain + '/' + item.selected
-            : appStore.config.ossDomain + '/api/uploads' + item.selected,
-        unselected: item.unselected.includes('api/uploads')
-            ? appStore.config.ossDomain + '/' + item.unselected
-            : appStore.config.ossDomain + '/api/uploads' + item.unselected
-        // selected: item.selected,
-        // unselected: item.unselected
+        selected: item.selected,
+        unselected: item.unselected,
     }))
     tabbar.style = data.style
 }
@@ -216,12 +168,14 @@ getData()
 .decoration-tabbar {
     min-height: calc(100vh - var(--navbar-height) - 80px);
     @apply flex flex-col;
+
     .pages-preview {
         background-color: #f7f7f7;
         width: 360px;
         height: 615px;
         color: #333;
         position: relative;
+
         .tabbar {
             position: absolute;
             height: 50px;

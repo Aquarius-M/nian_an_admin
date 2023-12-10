@@ -36,8 +36,8 @@ export default defineComponent({
     },
     emits: ['close'],
     setup() {
-        const { getImageUrl } = useAppStore()
-        return { getImageUrl }
+        const { getCurrentImage } = useAppStore()
+        return { getCurrentImage }
     }
 })
 </script>

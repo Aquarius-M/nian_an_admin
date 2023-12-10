@@ -22,7 +22,7 @@
                             >
                                 <del-wrap @close="deleteImg(index)">
                                     <file-item
-                                        :uri="excludeDomain ? getImageUrl(element) : element"
+                                        :uri="getCurrentImage(element)"
                                         :file-size="size"
                                         :type="type"
                                     ></file-item>
@@ -82,6 +82,8 @@ import Popup from '@/components/popup/index.vue'
 import FileItem from './file.vue'
 import Material from './index.vue'
 import Preview from './preview.vue'
+const appStore = useAppStore()
+
 import useAppStore from '@/stores/modules/app'
 import { useThrottleFn } from '@vueuse/shared'
 export default defineComponent({
@@ -149,7 +151,7 @@ export default defineComponent({
         const isAdd = ref(true)
         const currentIndex = ref(-1)
         const { disabled, limit, modelValue } = toRefs(props)
-        const { getImageUrl, getimageUrl } = useAppStore()
+        const { getimageUrl,getCurrentImage } = useAppStore()
         const tipsText = computed(() => {
             switch (props.type) {
                 case 'image':
@@ -214,7 +216,7 @@ export default defineComponent({
         }
 
         const handlePreview = (url: string) => {
-            previewUrl.value = url
+            previewUrl.value = getCurrentImage(url)
             showPreview.value = true
         }
 
@@ -251,7 +253,8 @@ export default defineComponent({
             showPreview,
             handlePreview,
             handleClose,
-            getImageUrl
+            getCurrentImage,
+            getimageUrl
         }
     }
 })

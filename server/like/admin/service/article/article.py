@@ -113,6 +113,8 @@ class ArticleService(IArticleService):
         article_list_pages = await paginate(db, article_list)
         for row in article_list_pages.lists:
             row.image = await UrlUtil.to_absolute_url(row.image)
+        print(article_list_pages)
+        
         return article_list_pages
 
     async def detail(self, detail_in: ArticleDetailIn) -> ArticleDetailOut:

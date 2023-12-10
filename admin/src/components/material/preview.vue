@@ -18,7 +18,6 @@
 
 <script lang="ts" setup>
 import useAppStore from '@/stores/modules/app'
-const { getImageUrl } = useAppStore()
 const props = defineProps({
     modelValue: {
         type: Boolean,

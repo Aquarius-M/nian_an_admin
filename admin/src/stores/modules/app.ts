@@ -25,6 +25,13 @@ const useAppStore = defineStore({
         getimageUrl(url: string) {
             return url ? `${this.config.ossDomain}/api/uploads/${url}/` : ''
         },
+        getCurrentImage(url: string) {
+            return url.includes(this.config.ossDomain)
+                ? url
+                : url.includes('api/static')
+                    ? `${this.config.ossDomain}${url}`
+                    : `${this.config.ossDomain}/api/uploads/${url}/`
+        },
         getConfig() {
             return new Promise((resolve, reject) => {
                 getConfig()

@@ -1,5 +1,5 @@
 <template>
-    <el-image :style="styles" v-bind="props" :src="src">
+    <el-image :style="styles" v-bind="props" :src="getCurrentImage(src)">
         <template #placeholder>
             <div class="image-slot"></div>
         </template>
@@ -17,6 +17,7 @@ import type { CSSProperties } from 'vue'
 import { addUnit } from '@/utils/util'
 import { imageProps } from 'element-plus'
 import useAppStore from '@/stores/modules/app'
+const { getCurrentImage } = useAppStore()
 const props = defineProps({
     width: {
         type: [String, Number],
@@ -33,7 +34,6 @@ const props = defineProps({
     ...imageProps
 })
 
-const { getImageUrl } = useAppStore()
 const styles = computed<CSSProperties>(() => {
     return {
         width: addUnit(props.width),

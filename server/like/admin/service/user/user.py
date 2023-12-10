@@ -116,7 +116,8 @@ class UserService(IUserService):
         assert user, '数据不存在！'
 
         result = pydantic.parse_obj_as(UserInfoOut, user)
-        result.avatar = await UrlUtil.to_absolute_url(result.avatar)
+        # result.avatar = await UrlUtil.to_absolute_url(result.avatar)
+        result.avatar = result.avatar
         result.sex = get_sex(int(result.sex))
         result.channel = get_login_client(int(result.channel))
         return result

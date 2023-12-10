@@ -4,7 +4,7 @@ interface Widget {
     content: any
     options: any
 }
-console.log(widgets)
+// console.log(widgets)
 const exportWidgets: Record<string, Widget> = {}
 Object.keys(widgets).forEach((key) => {
     const widgetName = key.replace(/^\.\/([\w-]+).*/gi, '$1')

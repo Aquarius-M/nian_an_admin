@@ -95,7 +95,9 @@ class UserService(IUserService):
 
         elif edit_in.field == 'motto':
             assert len(edit_in.value) <= 300, '个性签名不能超过300个字符'
-            
+        
+        elif edit_in.field == 'avatar':
+            print(edit_in.value)
         else:
             raise AppException(HttpResp.FAILED, msg='不被支持的字段类型')
 

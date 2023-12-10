@@ -10,8 +10,12 @@
                         <div>
                             <material-picker v-model="formData.avatar" :limit="1" />
                         </div>
-                        <div class="form-tips">建议尺寸：100*100px，支持jpg，jpeg，png格式</div>
+                        <!-- <div class="form-tips">建议尺寸：100*100px，支持jpg，jpeg，png格式</div> -->
                     </div>
+                    <!-- <el-button type="primary" >确定</el-button> -->
+                    <el-button type="primary" link v-perms="['user:edit']" @click="handleEdit(formData.avatar, 'avatar')">
+                        <icon name="el-icon-EditPen" />
+                    </el-button>
                 </el-form-item>
                 <el-form-item label="用户编号："> {{ formData.sn }} </el-form-item>
                 <el-form-item label="账号：">

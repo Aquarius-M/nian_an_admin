@@ -32,24 +32,21 @@
                 </template>
                 新增
             </el-button>
-            <el-button
-                    v-perms="['user:del']"
-                    :disabled="!selectData.length"
-                    type="danger"
-                    @click="handleDelete(selectData)"
-                >
-                    <template #icon>
-                        <icon name="el-icon-Delete" />
-                    </template>
-                    删除
-                </el-button>
+            <el-button v-perms="['user:del']" :disabled="!selectData.length" type="danger"
+                @click="handleDelete(selectData)">
+                <template #icon>
+                    <icon name="el-icon-Delete" />
+                </template>
+                删除
+            </el-button>
             <div class="mt-4">
-                <el-table size="large" v-loading="pager.loading" :data="pager.lists" @selection-change="handleSelectionChange">
+                <el-table size="large" v-loading="pager.loading" :data="pager.lists"
+                    @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55" />
                     <el-table-column label="用户编号" prop="sn" min-width="120" />
                     <el-table-column label="头像" min-width="100">
                         <template #default="{ row }">
-                            <el-avatar :src="row.avatar" :size="50" />
+                            <el-avatar :src="getCurrentImage(row.avatar)" :size="50" />
                         </template>
                     </el-table-column>
                     <el-table-column label="昵称" prop="nickname" min-width="100" />
@@ -94,7 +91,9 @@ import { ClientMap, StatusMap } from '@/enums/appEnums'
 import EditPopup from './add.vue'
 import feedback from '@/utils/feedback'
 import { onActivated, onMounted } from 'vue'
+import useAppStore from '@/stores/modules/app'
 
+const { getCurrentImage } = useAppStore()
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()
 
 const queryParams = reactive({

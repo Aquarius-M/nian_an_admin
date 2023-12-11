@@ -64,7 +64,8 @@ class UserService(IUserService):
 
         user_list_pages = await paginate(db, query)
         for row in user_list_pages.lists:
-            row.avatar = await UrlUtil.to_absolute_url(row.avatar)
+            # row.avatar = await UrlUtil.to_absolute_url(row.avatar)
+            # row.avatar = row.avatar
             row.sex = get_sex(int(row.sex))
             row.channel = get_login_client(int(row.channel))
         return user_list_pages
@@ -98,6 +99,7 @@ class UserService(IUserService):
         
         elif edit_in.field == 'avatar':
             print(edit_in.value)
+            edit_in.value = await UrlUtil.to_relative_url(edit_in.value)
         else:
             raise AppException(HttpResp.FAILED, msg='不被支持的字段类型')
 

@@ -98,8 +98,10 @@ class UserService(IUserService):
             assert len(edit_in.value) <= 300, '个性签名不能超过300个字符'
         
         elif edit_in.field == 'avatar':
-            print(edit_in.value)
-            edit_in.value = await UrlUtil.to_relative_url(edit_in.value)
+            if(edit_in.value !=""):
+                edit_in.value = await UrlUtil.to_relative_url(edit_in.value)
+            else:
+                edit_in.value = await ConfigUtil.get_val('user', 'defaultAvatar', '/api/static/default_avatar.png')
         else:
             raise AppException(HttpResp.FAILED, msg='不被支持的字段类型')
 

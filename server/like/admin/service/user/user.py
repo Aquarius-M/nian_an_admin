@@ -95,10 +95,11 @@ class UserService(IUserService):
 
         elif edit_in.field == 'motto':
             assert len(edit_in.value) <= 300, '个性签名不能超过300个字符'
-        
+
         elif edit_in.field == 'avatar':
             print(edit_in.value)
             edit_in.value = await UrlUtil.to_relative_url(edit_in.value)
+
         elif edit_in.field == 'password':
             salt = ToolsUtil.random_string(5)
             edit_in.value = ToolsUtil.make_md5(f'{edit_in.value.strip()}{salt}')
@@ -110,10 +111,11 @@ class UserService(IUserService):
 
         edit_dict = {
             edit_in.field: edit_in.value,
-            "salt": salt,
             'update_time': int(time.time())
         }
-        print(salt)
+        
+        if(edit_in.field == 'password'):
+            edit_dict['salt'] = salt
         return await db.execute(user_table.update()
                                 .where(user_table.c.id == edit_in.id)
                                 .values(**edit_dict))

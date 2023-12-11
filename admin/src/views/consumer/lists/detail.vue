@@ -22,6 +22,7 @@
                 <el-form-item label="用户编号："> {{ formData.sn }} </el-form-item>
                 <el-form-item label="账号：">
                     {{ formData.username }}
+                    <el-button link type="danger" class="ml-[10px]" @click="resetEdit('password')" v-perms="['user:reset']">重置密码</el-button>
                 </el-form-item>
                 <el-form-item label="用户昵称：">
                     {{ formData.nickname }}
@@ -95,9 +96,6 @@
                 <el-form-item label="状态：" min-width="100">
                     <el-switch :model-value="formData.isDisable" :active-value="0" :inactive-value="1"
                         v-perms="['user:detail:disable']" @change="($event) => changeStatus($event, formData.id)" />
-                </el-form-item>
-                <el-form-item label="     " min-width="100">
-                    <el-button type="danger" @click="resetEdit('password')" v-perms="['user:reset']">重置密码</el-button>
                 </el-form-item>
             </el-form>
         </el-card>

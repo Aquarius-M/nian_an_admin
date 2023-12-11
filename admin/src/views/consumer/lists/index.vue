@@ -49,10 +49,10 @@
                             <el-avatar :src="getCurrentImage(row.avatar)" :size="50" />
                         </template>
                     </el-table-column>
-                    <el-table-column label="昵称" prop="nickname" min-width="100" />
                     <el-table-column label="账号" prop="username" min-width="120" />
+                    <el-table-column label="昵称" prop="nickname" min-width="100" />
                     <el-table-column label="性别" prop="sex" min-width="100" />
-                    <el-table-column label="注册来源" prop="channel" min-width="100" />
+                    <el-table-column label="来源" prop="channel" min-width="100" />
                     <el-table-column label="注册时间" prop="createTime" min-width="120" />
                     <el-table-column label="状态" min-width="100">
                         <template #default="{ row }">

@@ -57,7 +57,6 @@ class UserService(IUserService):
             where.append(user_table.c.create_time >= int(time.mktime(list_in.start_time.timetuple())))
         if list_in.end_time:
             where.append(user_table.c.create_time <= int(time.mktime(list_in.end_time.timetuple())))
-        print(list_in.is_disable)
         if list_in.is_disable:
             where.append(user_table.c.is_disable == list_in.is_disable)
         query = select(self.select_columns).select_from(user_table).where(*where).order_by(user_table.c.id.desc())        
@@ -98,18 +97,23 @@ class UserService(IUserService):
             assert len(edit_in.value) <= 300, '个性签名不能超过300个字符'
         
         elif edit_in.field == 'avatar':
-            if(edit_in.value !=""):
-                edit_in.value = await UrlUtil.to_relative_url(edit_in.value)
-            else:
-                edit_in.value = await ConfigUtil.get_val('user', 'defaultAvatar', '/api/static/default_avatar.png')
+            print(edit_in.value)
+            edit_in.value = await UrlUtil.to_relative_url(edit_in.value)
+        elif edit_in.field == 'password':
+            salt = ToolsUtil.random_string(5)
+            edit_in.value = ToolsUtil.make_md5(f'{edit_in.value.strip()}{salt}')
+            print(edit_in.value)
+            print(salt)
+
         else:
             raise AppException(HttpResp.FAILED, msg='不被支持的字段类型')
 
         edit_dict = {
             edit_in.field: edit_in.value,
+            "salt": salt,
             'update_time': int(time.time())
         }
-
+        print(salt)
         return await db.execute(user_table.update()
                                 .where(user_table.c.id == edit_in.id)
                                 .values(**edit_dict))

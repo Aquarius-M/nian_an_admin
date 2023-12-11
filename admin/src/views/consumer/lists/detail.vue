@@ -14,8 +14,10 @@
                     </div>
                     <!-- <el-button type="primary" >确定</el-button> -->
                     <el-button type="primary" link v-perms="['user:edit']" @click="handleEdit(formData.avatar, 'avatar')">
-                        <icon name="el-icon-EditPen" />
+                        确认
                     </el-button>
+                    <el-button class="ml-[10px]" link type="danger" @click="resetEdit('avatar')"
+                        v-perms="['user:reset']">重置</el-button>
                 </el-form-item>
                 <el-form-item label="用户编号："> {{ formData.sn }} </el-form-item>
                 <el-form-item label="账号：">
@@ -27,8 +29,11 @@
                         @confirm="handleEdit($event, 'nickname')">
                         <el-button type="primary" link v-perms="['user:edit']">
                             <icon name="el-icon-EditPen" />
+                            <!-- 编辑 -->
                         </el-button>
                     </popover-input>
+                    <el-button class="ml-[10px]" link type="danger" @click="resetEdit('nickname')"
+                        v-perms="['user:reset']">重置</el-button>
                 </el-form-item>
                 <el-form-item label="性别：">
                     {{ formData.sex }}
@@ -77,8 +82,11 @@
                         @confirm="handleEdit($event, 'motto')" type="textarea" :show-limit="true">
                         <el-button type="primary" link v-perms="['user:edit']">
                             <icon name="el-icon-EditPen" />
+                            <!-- 编辑 -->
                         </el-button>
                     </popover-input>
+                    <el-button class="ml-[10px]" link type="danger" @click="resetEdit('motto')"
+                        v-perms="['user:reset']">重置</el-button>
                 </el-form-item>
 
                 <el-form-item label="注册来源："> {{ formData.channel }} </el-form-item>
@@ -87,6 +95,9 @@
                 <el-form-item label="状态：" min-width="100">
                     <el-switch :model-value="formData.isDisable" :active-value="0" :inactive-value="1"
                         v-perms="['user:detail:disable']" @change="($event) => changeStatus($event, formData.id)" />
+                </el-form-item>
+                <el-form-item label="     " min-width="100">
+                    <el-button type="danger" @click="resetEdit('password')" v-perms="['user:reset']">重置密码</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -98,6 +109,7 @@ import type { FormInstance } from 'element-plus'
 import { getUserDetail, userEdit, userStatus } from '@/api/consumer'
 import feedback from '@/utils/feedback'
 import { isEmpty } from '@/utils/util'
+import { getUserSetup, } from '@/api/setting/user'
 
 const route = useRoute()
 const formData = reactive({
@@ -130,6 +142,8 @@ const getDetails = async () => {
 }
 
 const handleEdit = async (value: string, field: string) => {
+    console.log(field)
+    console.log(value)
     if (isEmpty(value)) return
     await userEdit({
         id: route.query.id,
@@ -137,6 +151,27 @@ const handleEdit = async (value: string, field: string) => {
         value
     })
     feedback.msgSuccess('编辑成功')
+    getDetails()
+}
+
+const resetEdit = async (field: string) => {
+    await feedback.confirm('确定要重置？')
+    const data = await getUserSetup()
+    let value = ""
+    if (field == "avatar") {
+        value = data["defaultAvatar"]
+    } else if (field == "nickname") {
+        value = 'u' + formData.sn
+    }
+    else if (field == "password") {
+        value = 'a123456'
+    }
+    await userEdit({
+        id: route.query.id,
+        field,
+        value
+    })
+    feedback.msgSuccess('重置成功')
     getDetails()
 }
 

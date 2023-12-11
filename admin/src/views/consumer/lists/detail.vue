@@ -22,7 +22,8 @@
                 <el-form-item label="用户编号："> {{ formData.sn }} </el-form-item>
                 <el-form-item label="账号：">
                     {{ formData.username }}
-                    <el-button link type="danger" class="ml-[10px]" @click="resetEdit('password')" v-perms="['user:reset']">重置密码</el-button>
+                    <el-button link type="danger" class="ml-[10px]" @click="resetEdit('password')"
+                        v-perms="['user:reset']">重置密码</el-button>
                 </el-form-item>
                 <el-form-item label="用户昵称：">
                     {{ formData.nickname }}
@@ -92,7 +93,7 @@
 
                 <el-form-item label="注册来源："> {{ formData.channel }} </el-form-item>
                 <el-form-item label="注册时间："> {{ formData.createTime }} </el-form-item>
-                <el-form-item label="最近登录时间："> {{ formData.lastLoginTime }} </el-form-item>
+                <el-form-item label="最近登录："> {{ formData.lastLoginTime }} </el-form-item>
                 <el-form-item label="状态：" min-width="100">
                     <el-switch :model-value="formData.isDisable" :active-value="0" :inactive-value="1"
                         v-perms="['user:detail:disable']" @change="($event) => changeStatus($event, formData.id)" />
@@ -140,8 +141,15 @@ const getDetails = async () => {
 }
 
 const handleEdit = async (value: string, field: string) => {
-    console.log(field)
-    console.log(value)
+    if (field == "sex") {
+        if (value == "未知") {
+            value = '0'
+        } else if (value == "男") {
+            value = '1'
+        } else if (value == "女") {
+            value = '2'
+        }
+    }
     if (isEmpty(value)) return
     await userEdit({
         id: route.query.id,

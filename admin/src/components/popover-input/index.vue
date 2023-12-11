@@ -5,7 +5,8 @@
             <div class="flex p-3" @click.stop>
                 <div class="popover-input__input mr-[10px] flex-1" @click.stop>
                     <el-radio-group v-if="type == 'select'" v-model="inputValue" class="ml-4">
-                        <el-radio v-for="item in options" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
+                        <el-radio v-for="item in options" :key="item.value" :label="item.label">{{ item.label }}
+                        </el-radio>
                     </el-radio-group>
                     <el-input v-else v-model.trim="inputValue" :maxlength="limit" :show-word-limit="showLimit" :type="type"
                         :size="size" clearable :placeholder="placeholder" resize="none" :rows="5"/>

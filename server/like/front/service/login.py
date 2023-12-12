@@ -220,7 +220,7 @@ class LoginService(ILoginService):
 
         user_info = {
             'sn': sn,
-            'nickname': '用户%s' % sn,
+            'nickname': 'u%s' % sn,
             'username': param.username,
             'password': md5_pwd,
             'salt': salt,

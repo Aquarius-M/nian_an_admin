@@ -59,14 +59,14 @@ class UserService(IUserService):
     async def info(self, user_id: int) -> UserInfoOut:
         """个人信息"""
         obj = await db.fetch_one(user_table.select().where(user_table.c.id == user_id).limit(1))
-        auth = await db.fetch_one(
-            user_auth_table.select().where(user_auth_table.c.user_id == user_id,
-                                           user_auth_table.c.client == LoginClientEnum.MNP.value)
-            .limit(1))
+        # auth = await db.fetch_one(
+        #     user_auth_table.select().where(user_auth_table.c.user_id == user_id,
+        #                                    user_auth_table.c.client == LoginClientEnum.MNP.value)
+        #     .limit(1))
         res = UserInfoOut.from_orm(obj)
-        res.isPassword = True if obj.password else False
-        res.isBindMnp = True if auth else False
-        res.version = get_settings().version
+        # res.isPassword = True if obj.password else False
+        # res.isBindMnp = True if auth else False
+        # res.version = get_settings().version
         res.sex = get_sex(obj.sex)
         if res.avatar:
             res.avatar = await UrlUtil.to_absolute_url(res.avatar)

@@ -225,6 +225,7 @@ class LoginService(ILoginService):
             'password': md5_pwd,
             'salt': salt,
             'avatar': "/api/static/default_avatar.png",
+            'birthday': int(time.time()),
             'channel': param.client.value,
             'create_time': int(time.time()),
             'update_time': int(time.time())

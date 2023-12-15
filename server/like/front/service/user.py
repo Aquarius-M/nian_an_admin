@@ -59,6 +59,7 @@ class UserService(IUserService):
     async def info(self, user_id: int) -> UserInfoOut:
         """个人信息"""
         obj = await db.fetch_one(user_table.select().where(user_table.c.id == user_id).limit(1))
+        print(obj)
         # auth = await db.fetch_one(
         #     user_auth_table.select().where(user_auth_table.c.user_id == user_id,
         #                                    user_auth_table.c.client == LoginClientEnum.MNP.value)

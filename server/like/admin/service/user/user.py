@@ -154,6 +154,7 @@ class UserService(IUserService):
         create_dict['avatar'] = await UrlUtil.to_relative_url(user_create_in.avatar) \
             if user_create_in.avatar else (await ConfigUtil.get_val('user', 'defaultAvatar', '/api/static/default_avatar.png'))
         create_dict['channel'] = int(user_create_in.channel)
+        create_dict['birthday'] = int(time.time())
         create_dict['create_time'] = int(time.time())
         create_dict['update_time'] = int(time.time())
         print(create_dict)

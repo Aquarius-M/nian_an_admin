@@ -14,6 +14,7 @@ class UserCenterOut(BaseModel):
     nickname: str  # 用户昵称
     username: str  # 用户账号
     mobile: str  # 用户电话
+    birthday: int  # 用户生日
 
     class Config:
         orm_mode = True

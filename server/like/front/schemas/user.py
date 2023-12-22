@@ -14,6 +14,7 @@ class UserCenterOut(BaseModel):
     nickname: str  # 用户昵称
     username: str  # 用户账号
     mobile: str  # 用户电话
+    motto: Union[str, None]  # 用户签名
     birthday: int  # 用户生日
 
     class Config:
@@ -22,7 +23,7 @@ class UserCenterOut(BaseModel):
 
 class UserInfoOut(UserCenterOut):
     """个人信息返回"""
-    sex: str  # 用户性别
+    sex: int  # 用户性别
     # isPassword: Union[bool, None] = Field(alias='is_password')  # 用户性别
     # isBindMnp: Union[bool, None] = Field(alias='is_bind_mnp')  # 用户性别
     # version: Union[str, None]  # 版本

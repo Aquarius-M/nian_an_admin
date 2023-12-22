@@ -68,11 +68,14 @@ class UserService(IUserService):
         # res.isPassword = True if obj.password else False
         # res.isBindMnp = True if auth else False
         # res.version = get_settings().version
-        res.sex = get_sex(obj.sex)
+        # res.sex = get_sex(obj.sex)
+        # res.sex = obj.sex
         if res.avatar:
-            res.avatar = await UrlUtil.to_absolute_url(res.avatar)
+            res.avatar = res.avatar
+            # res.avatar = await UrlUtil.to_absolute_url(res.avatar)
         else:
-            res.avatar = await UrlUtil.to_absolute_url(await ConfigUtil.get_val('user', 'defaultAvatar', ''))
+            res.avatar = await ConfigUtil.get_val('user', 'defaultAvatar', '')
+            # res.avatar = await UrlUtil.to_absolute_url(await ConfigUtil.get_val('user', 'defaultAvatar', ''))
         return res
 
     async def edit(self, user_id: int, edit_in: UserEditIn):
